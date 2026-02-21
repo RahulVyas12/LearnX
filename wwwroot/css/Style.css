@@ -1,0 +1,63 @@
+﻿body {
+}
+/* Button Hover */
+.btn-dark:hover {
+    transform: translateY(-2px);
+    transition: 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.btn-outline-secondary:hover {
+    background-color: #2563eb;
+    color: white;
+    border-color: #2563eb;
+    transition: 0.3s ease;
+}
+
+/* Card Hover Effect */
+.card {
+    transition: all 0.3s ease;
+    border: none;
+}
+
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+/* Image Hover Zoom */
+.card-img-top {
+    transition: transform 0.4s ease;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+/* Stats Hover */
+.col-md-3 h3 {
+    transition: 0.3s ease;
+}
+
+.col-md-3:hover h3 {
+    transform: scale(1.1);
+}
+
+.card {
+    transition: all 0.3s ease;
+    border: none;
+    overflow: hidden;
+}
+
+.card-img-top {
+    transition: transform 0.4s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+    .card:hover .card-img-top {
+        transform: scale(1.05);
+    }
