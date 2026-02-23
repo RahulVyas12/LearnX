@@ -1,0 +1,115 @@
+﻿@model AccountModel
+
+@{
+    Layout = null;
+
+    // Read role from query string; default to "student"
+    var role      = Context.Request.Query["role"].ToString();
+    if (string.IsNullOrEmpty(role)) role = "student";
+    var isStudent = role == "student";
+
+    // Derive dynamic values from role
+    var btnText         = isStudent ? "Login as Student"    : "Login as Admin";
+    var emailPlaceholder = isStudent ? "student@learnx.com" : "admin@learnx.com";
+
+    // Tab CSS classes
+    var activeTab   = "flex-1 cursor-pointer rounded-lg bg-white py-2.5 text-sm font-semibold text-slate-800 shadow-sm transition-all duration-200";
+    var inactiveTab = "flex-1 cursor-pointer rounded-lg bg-transparent py-2.5 text-sm font-semibold text-slate-400 transition-all duration-200";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - LearnX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="font-[Inter,sans-serif] flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-green-50 via-white to-white px-4 py-8">
+
+    <!-- Logo Section -->
+    <div class="mb-7 flex flex-col items-center">
+
+        <!-- Icon Circle -->
+        <div class="mb-3 flex h-[68px] w-[68px] items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-indigo-600 shadow-[0_8px_24px_rgba(124,58,237,0.35)] transition-transform duration-300 hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" viewBox="0 0 24 24">
+                <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm0 12.5L4.5 11.3V15c0 2.21 3.36 4 7.5 4s7.5-1.79 7.5-4v-3.7L12 15.5z" />
+            </svg>
+        </div>
+
+        <!-- Brand Name -->
+        <h1 class="mb-1 bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text font-extrabold leading-tight text-[2rem] text-transparent">
+            LearnX
+        </h1>
+
+        <!-- Tagline -->
+        <p class="text-sm tracking-wide text-slate-500">Job-Oriented Learning Platform</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="w-full max-w-[460px] rounded-2xl border border-slate-200 bg-white px-9 pb-8 pt-9 shadow-[0_4px_24px_rgba(0,0,0,0.07)]">
+
+        <!-- Card Header -->
+        <div class="mb-6">
+            <h2 class="mb-1 text-2xl font-extrabold text-slate-900">Welcome Back</h2>
+            <p class="text-sm text-slate-400">Login to continue your learning journey</p>
+        </div>
+
+        <!-- Student / Admin Toggle (no JS — tabs are links with ?role= query string) -->
+        <div class="mb-6 flex rounded-xl bg-gray-100 p-1">
+            <a href="?role=student" class="@(isStudent ? activeTab : inactiveTab) text-center no-underline">
+                Student
+            </a>
+            <a href="?role=admin" class="@(isStudent ? inactiveTab : activeTab) text-center no-underline">
+                Admin
+            </a>
+        </div>
+
+        <form asp-action="Login" method="post">
+            <input type="hidden" name="role" value="@role" />
+
+            <!-- Email -->
+            <div class="mb-5">
+                <label class="mb-2 block text-sm font-semibold text-slate-800">Email</label>
+                <input asp-for="email"
+                       type="email"
+                       placeholder="@emailPlaceholder"
+                       class="h-[52px] w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition-all duration-200 placeholder:text-slate-400 focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10" />
+                <span asp-validation-for="email" class="mt-1 block text-xs text-red-500"></span>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-5">
+                <label class="mb-2 block text-sm font-semibold text-slate-800">Password</label>
+                <input asp-for="password"
+                       type="password"
+                       placeholder="••••••••"
+                       class="h-[52px] w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition-all duration-200 placeholder:text-slate-400 focus:border-violet-600 focus:ring-2 focus:ring-violet-600/10" />
+                <span asp-validation-for="password" class="mt-1 block text-xs text-red-500"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit"
+                    class="mt-1 h-[52px] w-full cursor-pointer rounded-xl bg-slate-900 text-sm font-bold tracking-wide text-white transition-all duration-200 hover:bg-slate-700 active:scale-[0.98]">
+                @btnText
+            </button>
+        </form>
+
+        <!-- Register Link -->
+        <div class="mt-6 text-center">
+            <p class="text-sm text-slate-500">
+                Don't have an account?
+                <a asp-controller="screens" asp-action="RegisterPage"
+                   class="ml-1 font-bold text-slate-900 transition-colors duration-200 hover:text-violet-600">
+                    Register
+                </a>
+            </p>
+        </div>
+
+    </div>
+
+    <partial name="_ValidationScriptsPartial" />
+
+</body>
+</html>
