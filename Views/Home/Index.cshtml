@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Home";
 }
 
@@ -24,8 +23,8 @@
                 </p>
 
                 <div class="mt-4">
-                    <button class="btn btn-dark me-3">Start Learning →</button>
-                    <button class ="btn btn-outline-secondary">Explore Paths</button>
+                    <a class="btn btn-dark me-3" asp-controller="screens" asp-action="RegisterPage">Start Learning →</a>
+                    <a class="btn btn-outline-secondary" asp-controller="screens" asp-action="LoginPage">Explore Paths</a>
                 </div>
             </div>
 
@@ -179,7 +178,7 @@
             Join thousands of learners achieving their career goals
         </p>
 
-        <a href="#" class="btn btn-dark mt-3 px-4">
+        <a asp-controller="screens" asp-action="RegisterPage" class="btn btn-dark mt-3 px-4">
             Create Free Account →
         </a>
 

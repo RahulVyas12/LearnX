@@ -1,0 +1,239 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_DashboardLayout";
+}
+
+<link href="~/css/dashboard-home.css" rel="stylesheet" asp-append-version="true" />
+
+<div class="dashboard-header-container">
+    <h1 class="page-title">Dashboard Overview</h1>
+    <p class="page-subtitle">Track your learning progress and achievements</p>
+</div>
+
+<!-- =======================
+     METRICS GRID
+======================== -->
+<div class="metrics-grid">
+    <!-- Card 1 -->
+    <div class="metric-card metric-blue">
+        <div class="metric-top">
+            <span class="metric-name">Enrolled Paths</span>
+            <div class="metric-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </div>
+        </div>
+        <div class="metric-value">2</div>
+        <div class="metric-footer">Active learning paths</div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="metric-card metric-green">
+        <div class="metric-top">
+            <span class="metric-name">Tests Passed</span>
+            <div class="metric-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v6a5 5 0 0 1-10 0V4z"/><path d="M3 4h4v3a2 2 0 0 0-4 0V4z"/><path d="M17 4h4v3a2 2 0 0 1-4 0V4z"/></svg>
+            </div>
+        </div>
+        <div class="metric-value">5</div>
+        <div class="metric-footer">90%+ score achieved</div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="metric-card metric-orange">
+        <div class="metric-top">
+            <span class="metric-name">Current Level</span>
+            <div class="metric-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            </div>
+        </div>
+        <div class="metric-value">Intermediate</div>
+        <div class="metric-footer">SQL Developer path</div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="metric-card metric-purple">
+        <div class="metric-top">
+            <span class="metric-name">Learning Streak</span>
+            <div class="metric-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+        </div>
+        <div class="metric-value">12</div>
+        <div class="metric-footer">days in a row 🔥</div>
+    </div>
+</div>
+
+<!-- =======================
+     MAIN LAYOUT GRID 
+======================== -->
+<div class="dashboard-content-grid">
+    
+    <!-- LEFT COLUMN: Active Learning Paths -->
+    <div class="grid-left-col">
+        <div class="section-header">
+            <h2>Active Learning Paths</h2>
+            <button class="btn-outline">Browse All</button>
+        </div>
+
+        <div class="learning-paths-list">
+            
+            <!-- Learning Path Card 1 -->
+            <div class="path-card path-border-purple">
+                <div class="path-card-content">
+                    <div class="path-info">
+                        <div class="path-meta">
+                            <span class="badge badge-blue">Intermediate</span>
+                            <span class="path-duration">• 8 weeks</span>
+                        </div>
+                        <h3 class="path-title">SQL Developer</h3>
+                        <p class="path-desc">Master database management and SQL queries for backend development roles</p>
+                    </div>
+                    <div class="path-image">
+                        <img src="https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&q=80&w=300&h=200" alt="SQL Developer Course" />
+                    </div>
+                </div>
+                
+                <div class="path-progress-container">
+                    <div class="progress-header">
+                        <span class="progress-label">Overall Progress</span>
+                        <span class="progress-percent">45%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: 45%;"></div>
+                    </div>
+                    <div class="path-footer">
+                        <div class="path-tags">
+                            <span class="text-green flex-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M12 15l-4-4M12 15l4-4M2 21h20"/></svg>
+                                Beginner Complete
+                            </span>
+                            <span class="text-orange flex-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                                Intermediate 65%
+                            </span>
+                        </div>
+                        <button class="btn-primary">
+                            Continue
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Path Card 2 -->
+            <div class="path-card path-border-purple">
+                <div class="path-card-content">
+                    <div class="path-info">
+                        <div class="path-meta">
+                            <span class="badge badge-light-blue">Beginner</span>
+                            <span class="path-duration">• 12 weeks</span>
+                        </div>
+                        <h3 class="path-title">Frontend Developer</h3>
+                        <p class="path-desc">Build modern web applications with HTML, CSS, JavaScript, and React</p>
+                    </div>
+                    <div class="path-image">
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=300&h=200" alt="Frontend Developer Course" />
+                    </div>
+                </div>
+                
+                <div class="path-progress-container">
+                    <div class="progress-header">
+                        <span class="progress-label">Overall Progress</span>
+                        <span class="progress-percent">45%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: 45%;"></div>
+                    </div>
+                    <div class="path-footer">
+                        <div class="path-tags">
+                            <span class="text-green flex-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M12 15l-4-4M12 15l4-4M2 21h20"/></svg>
+                                Beginner Complete
+                            </span>
+                            <span class="text-orange flex-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                                Intermediate 65%
+                            </span>
+                        </div>
+                        <button class="btn-primary">
+                            Continue
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge Banner -->
+            <div class="challenge-banner">
+                <div class="challenge-info">
+                    <h3>Ready for a challenge?</h3>
+                    <p>Take a practice test to assess your skills</p>
+                </div>
+                <button class="btn-success">Start Test</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- RIGHT COLUMN: Announcements -->
+    <div class="grid-right-col">
+        <div class="section-header">
+            <h2>Announcements</h2>
+            <button class="btn-link">View All</button>
+        </div>
+
+        <div class="announcements-list">
+            
+            <!-- Announcement 1 -->
+            <div class="announcement-card border-top-blue">
+                <div class="announcement-meta">
+                    <span class="badge badge-outline">UPDATE</span>
+                    <span class="meta-date">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        1/15/2024
+                    </span>
+                </div>
+                <h4 class="announcement-title">New Course: Advanced React Patterns</h4>
+                <p class="announcement-desc">We are excited to announce a new advanced module in the Frontend Developer path...</p>
+            </div>
+
+            <!-- Announcement 2 -->
+            <div class="announcement-card border-top-orange">
+                <div class="announcement-meta">
+                    <span class="badge badge-outline">SCHEDULE</span>
+                    <span class="meta-date">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        1/12/2024
+                    </span>
+                </div>
+                <h4 class="announcement-title">Upcoming Test Schedule</h4>
+                <p class="announcement-desc">SQL Developer intermediate level tests will be available from January 20th. Make sure you...</p>
+            </div>
+
+            <!-- Announcement 3 -->
+            <div class="announcement-card border-top-red">
+                <div class="announcement-meta">
+                    <span class="badge badge-outline">NOTICE</span>
+                    <span class="meta-date">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        1/10/2024
+                    </span>
+                </div>
+                <h4 class="announcement-title">Platform Maintenance Notice</h4>
+                <p class="announcement-desc">The platform will undergo scheduled maintenance on January 18th from 2:00 AM...</p>
+            </div>
+
+            <!-- Achievement Banner (Small) -->
+            <div class="achievement-banner">
+                <div class="achievement-icon-bg">
+                    <img src="https://img.icons8.com/color/48/000000/gold-medal.png" alt="Badge" />
+                </div>
+                <div class="achievement-text">
+                    <h4>Keep Going! 🚀</h4>
+                    <p>Complete 3 more tests to unlock a special achievement badge!</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
