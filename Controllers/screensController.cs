@@ -25,5 +25,10 @@ namespace LearnX.Controllers
         {
             return View();
         }
+
+        public IActionResult ProgressReport()
+        {
+            return View();
+        }
     }
 }

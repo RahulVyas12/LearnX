@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+@{
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+}
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -8,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="dashboard-body">
 
@@ -37,8 +42,8 @@
             <div class="nav-section">
                 <span class="nav-section-title">Dashboard</span>
                 <ul class="nav-list">
-                    <li class="nav-item active" id="nav-overview">
-                        <a asp-controller="screens" asp-action="Index" class="nav-link">
+                    <li class="nav-item @(currentAction == "Dashboard" || currentAction == "Index" ? "active" : "")" id="nav-overview">
+                        <a asp-controller="screens" asp-action="Dashboard" class="nav-link">
                             <span class="nav-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -48,8 +53,8 @@
                             <span class="nav-label">Overview</span>
                         </a>
                     </li>
-                    <li class="nav-item" id="nav-progress">
-                        <a asp-controller="screens" asp-action="Index" class="nav-link">
+                    <li class="nav-item @(currentAction == "ProgressReport" ? "active" : "")" id="nav-progress">
+                        <a asp-controller="screens" asp-action="ProgressReport" class="nav-link">
                             <span class="nav-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="18" y1="20" x2="18" y2="10"/>
@@ -71,7 +76,7 @@
                 </button>
                 <ul class="nav-list" id="learning-items">
                     <li class="nav-item" id="nav-learning-center">
-                        <a asp-controller="screens" asp-action="Index" class="nav-link">
+                        <a asp-controller="screens" asp-action="Dashboard" class="nav-link">
                             <span class="nav-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
@@ -82,7 +87,7 @@
                         </a>
                     </li>
                     <li class="nav-item" id="nav-my-learning">
-                        <a asp-controller="screens" asp-action="Index" class="nav-link">
+                        <a asp-controller="screens" asp-action="Dashboard" class="nav-link">
                             <span class="nav-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
@@ -103,7 +108,7 @@
                 </button>
                 <ul class="nav-list" id="assessment-items">
                     <li class="nav-item" id="nav-practice">
-                        <a asp-controller="screens" asp-action="Index" class="nav-link">
+                        <a asp-controller="screens" asp-action="Dashboard" class="nav-link">
                             <span class="nav-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M9 11l3 3L22 4"/>
@@ -114,7 +119,7 @@
                         </a>
                     </li>
                     <li class="nav-item" id="nav-test-history">
-                        <a asp-controller="screens" asp-action="Index" class="nav-link">
+                        <a asp-controller="screens" asp-action="Dashboard" class="nav-link">
                             <span class="nav-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -135,7 +140,7 @@
                 <span class="nav-section-title">General</span>
                 <ul class="nav-list">
                     <li class="nav-item" id="nav-announcement">
-                        <a asp-controller="screens" asp-action="Index" class="nav-link">
+                        <a asp-controller="screens" asp-action="Dashboard" class="nav-link">
                             <span class="nav-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
@@ -146,7 +151,7 @@
                         </a>
                     </li>
                     <li class="nav-item" id="nav-settings">
-                        <a asp-controller="screens" asp-action="Index" class="nav-link">
+                        <a asp-controller="screens" asp-action="Dashboard" class="nav-link">
                             <span class="nav-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="3"/>
