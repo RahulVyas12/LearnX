@@ -7,6 +7,26 @@ const AdminUsers = () => {
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [roleFilter, setRoleFilter] = useState('All');
+    
+    // Edit Modal State
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [editingUser, setEditingUser] = useState(null);
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        role: '',
+        department: ''
+    });
+
+    // Add Modal State
+    const [isAddOpen, setIsAddOpen] = useState(false);
+    const [addFormData, setAddFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        role: 'student',
+        department: ''
+    });
 
     const fetchUsers = async () => {
         setLoading(true);
@@ -35,6 +55,62 @@ const AdminUsers = () => {
         }
     };
 
+    const handleEdit = (user) => {
+        setEditingUser(user);
+        setFormData({
+            name: user.name || '',
+            email: user.email || '',
+            role: user.role || 'student',
+            department: user.department || ''
+        });
+        setIsEditOpen(true);
+    };
+
+    const handleDelete = async (user) => {
+        const confirmed = window.confirm(
+            `Permanently remove user?\n\nThis will delete '${user.name}' (${user.email}) and all their progress data. This action cannot be undone.`
+        );
+        
+        if (!confirmed) return;
+        
+        // Optimistic update
+        const originalUsers = [...users];
+        setUsers(users.filter(u => u.id !== user.id));
+        
+        try {
+            await adminService.deleteUser(user.id);
+            toast.success('User permanently removed');
+        } catch (error) {
+            setUsers(originalUsers);
+            toast.error('Failed to remove user');
+        }
+    };
+
+    const handleUpdateUser = async (e) => {
+        e.preventDefault();
+        try {
+            await adminService.updateUser(editingUser.id, formData);
+            toast.success('User details updated');
+            setIsEditOpen(false);
+            fetchUsers();
+        } catch (error) {
+            toast.error('Failed to update user');
+        }
+    };
+
+    const handleAddUser = async (e) => {
+        e.preventDefault();
+        try {
+            await adminService.inviteUser(addFormData);
+            toast.success('User added successfully');
+            setIsAddOpen(false);
+            setAddFormData({ name: '', email: '', password: '', role: 'student', department: '' });
+            fetchUsers();
+        } catch (error) {
+            toast.error(error.response?.data?.error || 'Failed to add user');
+        }
+    };
+
     const filteredUsers = users.filter(user => {
         const nameMatch = user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false;
         const emailMatch = user.email?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false;
@@ -46,9 +122,20 @@ const AdminUsers = () => {
     return (
         <div className="space-y-6 max-w-7xl mx-auto font-['Plus_Jakarta_Sans']">
             {/* Header */}
-            <div>
-                <h1 className="text-2xl font-black text-slate-900 tracking-tight">Access Control & Users</h1>
-                <p className="text-slate-500 font-medium mt-1">Manage permissions, monitor student progress, and audit accounts.</p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-black text-slate-900 tracking-tight">Access Control & Users</h1>
+                    <p className="text-slate-500 font-medium mt-1">Manage permissions, monitor student progress, and audit accounts.</p>
+                </div>
+                <button 
+                    onClick={() => setIsAddOpen(true)}
+                    className="flex items-center justify-center gap-2 px-5 py-3 bg-indigo-600 text-white rounded-2xl font-black text-sm shadow-xl shadow-indigo-500/20 hover:bg-indigo-700 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add New Student
+                </button>
             </div>
 
             {/* Filters Bar */}
@@ -91,12 +178,12 @@ const AdminUsers = () => {
                                     <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Access Level</th>
                                     <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Engagement</th>
                                     <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Joined Date</th>
-                                    <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Settings</th>
+                                    <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">
                                 {filteredUsers.map((u) => (
-                                    <tr key={u.id} className="hover:bg-slate-50/50 transition-colors">
+                                    <tr key={u.id} className="hover:bg-slate-50/50 transition-colors group">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="h-10 w-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-black text-sm border border-indigo-200">
@@ -129,12 +216,26 @@ const AdminUsers = () => {
                                             {u.joinedDate ? new Date(u.joinedDate).toLocaleDateString() : 'N/A'}
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <button 
-                                                onClick={() => handleUpdateRole(u.id, u.role)}
-                                                className="text-[11px] font-black uppercase tracking-widest text-slate-400 hover:text-indigo-600 border border-slate-200 hover:border-indigo-200 px-3 py-1.5 rounded-lg transition-all"
-                                            >
-                                                {u.role?.toLowerCase() === 'admin' ? 'Revoke Admin' : 'Make Admin'}
-                                            </button>
+                                            <div className="flex items-center justify-end gap-2">
+                                                <button 
+                                                    onClick={() => handleEdit(u)}
+                                                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                    title="Edit User"
+                                                >
+                                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                    </svg>
+                                                </button>
+                                                <button 
+                                                    onClick={() => handleDelete(u)}
+                                                    className="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors"
+                                                    title="Delete User"
+                                                >
+                                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
@@ -150,6 +251,168 @@ const AdminUsers = () => {
                     </div>
                 )}
             </div>
+
+            {/* Edit User Modal */}
+            {isEditOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                        <div className="p-6 border-b border-slate-100">
+                            <h3 className="text-xl font-black text-slate-800">Edit User Details</h3>
+                            <p className="text-sm text-slate-500 font-medium">Update profile information and access level.</p>
+                        </div>
+                        
+                        <form onSubmit={handleUpdateUser} className="p-6 space-y-4 bg-slate-50/50">
+                            <div className="space-y-1">
+                                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Full Name</label>
+                                <input 
+                                    required
+                                    type="text" 
+                                    value={formData.name}
+                                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                                    className="w-full bg-white border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Email Address</label>
+                                <input 
+                                    required
+                                    type="email" 
+                                    value={formData.email}
+                                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                                    className="w-full bg-white border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                                />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Role</label>
+                                    <select 
+                                        value={formData.role}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, role: e.target.value }))}
+                                        className="w-full bg-white border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-bold text-xs uppercase"
+                                    >
+                                        <option value="student">Student</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Department</label>
+                                    <input 
+                                        type="text" 
+                                        value={formData.department}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, department: e.target.value }))}
+                                        className="w-full bg-white border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="flex gap-3 justify-end pt-4 border-t border-slate-200/60">
+                                <button 
+                                    type="button" 
+                                    onClick={() => setIsEditOpen(false)} 
+                                    className="px-5 py-2.5 rounded-xl font-bold bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className="px-5 py-2.5 rounded-xl font-bold bg-indigo-600 text-white hover:bg-indigo-700 shadow-md shadow-indigo-500/20 transition-all"
+                                >
+                                    Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Add User Modal */}
+            {isAddOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                        <div className="p-6 border-b border-slate-100">
+                            <h3 className="text-xl font-black text-slate-800">Add New User</h3>
+                            <p className="text-sm text-slate-500 font-medium">Create a new account manually.</p>
+                        </div>
+                        
+                        <form onSubmit={handleAddUser} className="p-6 space-y-4 bg-slate-50/50">
+                            <div className="space-y-1">
+                                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Full Name</label>
+                                <input 
+                                    required
+                                    type="text" 
+                                    value={addFormData.name}
+                                    onChange={(e) => setAddFormData(prev => ({ ...prev, name: e.target.value }))}
+                                    placeholder="Enter full name"
+                                    className="w-full bg-white border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                                />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Email Address</label>
+                                    <input 
+                                        required
+                                        type="email" 
+                                        value={addFormData.email}
+                                        onChange={(e) => setAddFormData(prev => ({ ...prev, email: e.target.value }))}
+                                        placeholder="user@example.com"
+                                        className="w-full bg-white border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                                    />
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Password</label>
+                                    <input 
+                                        required
+                                        type="password" 
+                                        value={addFormData.password}
+                                        onChange={(e) => setAddFormData(prev => ({ ...prev, password: e.target.value }))}
+                                        placeholder="Min. 6 chars"
+                                        className="w-full bg-white border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                                    />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Role</label>
+                                    <select 
+                                        value={addFormData.role}
+                                        onChange={(e) => setAddFormData(prev => ({ ...prev, role: e.target.value }))}
+                                        className="w-full bg-white border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-bold text-xs uppercase"
+                                    >
+                                        <option value="student">Student</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Department</label>
+                                    <input 
+                                        type="text" 
+                                        value={addFormData.department}
+                                        onChange={(e) => setAddFormData(prev => ({ ...prev, department: e.target.value }))}
+                                        placeholder="Optional"
+                                        className="w-full bg-white border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="flex gap-3 justify-end pt-4 border-t border-slate-200/60">
+                                <button 
+                                    type="button" 
+                                    onClick={() => setIsAddOpen(false)} 
+                                    className="px-5 py-2.5 rounded-xl font-bold bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className="px-5 py-2.5 rounded-xl font-bold bg-indigo-600 text-white hover:bg-indigo-700 shadow-md shadow-indigo-500/20 transition-all"
+                                >
+                                    Create Account
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
