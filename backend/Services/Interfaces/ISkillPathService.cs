@@ -1,16 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using myapp_backend.Models;
+using myapp_backend.DTOs;
 
 namespace myapp_backend.Services.Interfaces
 {
     public interface ISkillPathService
     {
-        Task<SkillPath?> GetByIdAsync(Guid id);
-        Task<IEnumerable<SkillPath>> GetAllAsync();
-        Task AddAsync(SkillPath entity);
-        Task UpdateAsync(SkillPath entity);
-        Task DeleteAsync(Guid id);
+        Task<SkillPathDto?> GetByIdAsync(Guid id);
+        Task<IEnumerable<SkillPathDto>> GetAllAsync();
+        Task<SkillPathDto> AddAsync(SkillPathDto dto);
+        Task<bool> UpdateAsync(Guid id, SkillPathDto dto);
+        Task<bool> DeleteAsync(Guid id);
     }
 }
