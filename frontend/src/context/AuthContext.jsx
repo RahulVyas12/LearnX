@@ -10,21 +10,35 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Restore user from localStorage on mount
+    // Restore user from localStorage on mount and verify
     useEffect(() => {
         const token = localStorage.getItem('token');
-        const savedUser = localStorage.getItem('user');
-        
-        if (token && savedUser) {
-            try {
-                setUser(JSON.parse(savedUser));
-            } catch (e) {
-                console.error('Error parsing saved user:', e);
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-            }
+        if (token) {
+            authService.verify()
+                .then(res => {
+                    const data = res.data;
+                    const verifiedUser = {
+                        id: data.id,
+                        name: data.name,
+                        email: data.email,
+                        role: data.role,
+                        avatarUrl: data.avatarUrl,
+                        department: data.department,
+                        joined: data.joined || data.joinedAt
+                    };
+                    setUser(verifiedUser);
+                    localStorage.setItem('user', JSON.stringify(verifiedUser));
+                })
+                .catch(err => {
+                    console.error('Session verification failed:', err);
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    setUser(null);
+                })
+                .finally(() => setLoading(false));
+        } else {
+            setLoading(false);
         }
-        setLoading(false);
     }, []);
 
     const updateUser = (data) => {
