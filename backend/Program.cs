@@ -9,6 +9,9 @@ using myapp_backend.Services.Interfaces;
 using myapp_backend.Services;
 using myapp_backend.Middleware;
 using Microsoft.Extensions.FileProviders;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using myapp_backend.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,6 +68,8 @@ builder.Services.AddAuthorization();
 // 4. Register Repositories and Services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<ISkillPathRepository, SkillPathRepository>();
 builder.Services.AddScoped<ISkillPathService, SkillPathService>();
@@ -78,24 +83,6 @@ builder.Services.AddScoped<IModuleService, ModuleService>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 
-builder.Services.AddScoped<IUserEnrollmentRepository, UserEnrollmentRepository>();
-builder.Services.AddScoped<IUserEnrollmentService, UserEnrollmentService>();
-
-builder.Services.AddScoped<IUserLevelProgressRepository, UserLevelProgressRepository>();
-builder.Services.AddScoped<IUserLevelProgressService, UserLevelProgressService>();
-
-builder.Services.AddScoped<IUserModuleProgressRepository, UserModuleProgressRepository>();
-builder.Services.AddScoped<IUserModuleProgressService, UserModuleProgressService>();
-
-builder.Services.AddScoped<ITestAttemptRepository, TestAttemptRepository>();
-builder.Services.AddScoped<ITestAttemptService, TestAttemptService>();
-
-builder.Services.AddScoped<ITestAttemptAnswerRepository, TestAttemptAnswerRepository>();
-builder.Services.AddScoped<ITestAttemptAnswerService, TestAttemptAnswerService>();
-
-builder.Services.AddScoped<IPracticeSessionRepository, PracticeSessionRepository>();
-builder.Services.AddScoped<IPracticeSessionService, PracticeSessionService>();
-
 builder.Services.AddScoped<ICertificateRepository, CertificateRepository>();
 builder.Services.AddScoped<ICertificateService, CertificateService>();
 
@@ -103,8 +90,14 @@ builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
 builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 
 builder.Services.AddScoped<ILevelMasteryTestService, LevelMasteryTestService>();
+builder.Services.AddScoped<IProgressService, ProgressService>();
+builder.Services.AddScoped<IUploadService, UploadService>();
 
 builder.Services.AddControllers();
+builder.Services.AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddOpenApi();
 
 builder.WebHost.UseUrls("https://localhost:7001", "http://localhost:5000");
@@ -123,13 +116,13 @@ if (app.Environment.IsDevelopment())
     }
 }
 
-app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseStaticFiles(new StaticFileOptions {
     FileProvider = new PhysicalFileProvider(
         Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
     RequestPath = ""
 });
-// app.UseHttpsRedirection();
+
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
