@@ -1,18 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using myapp_backend.Models;
+using myapp_backend.DTOs;
 
 namespace myapp_backend.Services.Interfaces
 {
     public interface ILevelService
     {
-        Task<Level?> GetByIdAsync(Guid id);
-        Task<IEnumerable<Level>> GetAllAsync();
-        Task AddAsync(Level entity);
-        Task UpdateAsync(Level entity);
-        Task DeleteAsync(Guid id);
-        Task<IEnumerable<Level>> GetBySkillPathIdAsync(Guid skillPathId);
-        Task<Level?> GetByIdWithModulesAsync(Guid id);
+        Task<LevelDto?> GetByIdAsync(Guid id);
+        Task<IEnumerable<LevelDto>> GetAllAsync();
+        Task<LevelDto> AddAsync(LevelDto dto);
+        Task<bool> UpdateAsync(Guid id, LevelDto dto);
+        Task<bool> DeleteAsync(Guid id);
+        Task<IEnumerable<LevelDto>> GetBySkillPathIdAsync(Guid skillPathId);
+        Task<IEnumerable<LevelDetailDto>> GetBySkillPathIdWithModulesAsync(Guid skillPathId);
     }
 }
