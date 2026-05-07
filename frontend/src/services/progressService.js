@@ -10,6 +10,7 @@ export const progressService = {
     enroll: (pathId) => api.post(`/progress/enroll/${pathId}`),
     unenroll: (pathId) => api.delete(`/progress/unenroll/${pathId}`),
     getLevelUnlockStatus: (skillPathId) => api.get(`/progress/levels/unlock-status/${skillPathId}`),
+    getAnnouncements: () => api.get('/announcements'),
 };
 
 export default progressService;
