@@ -176,11 +176,6 @@ const AdminSkillPaths = () => {
         }
     };
 
-    const getLevelCount = (pathId) => {
-        // This would typically come from the API, but for now we'll return a placeholder
-        return Math.floor(Math.random() * 5) + 1;
-    };
-
     const getImageUrl = (skillPath) => {
         if (!skillPath.imageUrl) return null;
         return skillPath.imageUrl.startsWith('http') ? skillPath.imageUrl : `http://localhost:5000${skillPath.imageUrl}`;
@@ -255,7 +250,7 @@ const AdminSkillPaths = () => {
                                         </td>
                                         <td className="px-6 py-4 text-center">
                                             <span className="px-2.5 py-1 text-[11px] font-black bg-blue-100 text-blue-600 rounded-lg">
-                                                {getLevelCount(path.id)} levels
+                                                {path.totalLevels || 0} levels
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-center">
