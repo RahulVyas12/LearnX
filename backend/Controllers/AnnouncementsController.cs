@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using myapp_backend.DTOs;
-using myapp_backend.Models;
 using myapp_backend.Services.Interfaces;
 using System.Security.Claims;
 
@@ -32,28 +31,17 @@ namespace myapp_backend.Controllers
             var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!Guid.TryParse(userIdStr, out var userId)) return Unauthorized();
 
-            var announcement = new Announcement
-            {
-                Id = Guid.NewGuid(),
-                Title = dto.Title,
-                Content = dto.Content,
-                Category = dto.Category,
-                CreatedBy = userId,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            await _announcementService.AddAsync(announcement);
-            return Ok(announcement);
+            var result = await _announcementService.AddAsync(dto, userId);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var existing = await _announcementService.GetByIdAsync(id);
-            if (existing == null) return NotFound();
+            var success = await _announcementService.DeleteAsync(id);
+            if (!success) return NotFound();
 
-            await _announcementService.DeleteAsync(id);
             return Ok(new { message = "Announcement deleted." });
         }
     }
