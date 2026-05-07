@@ -54,6 +54,8 @@ function App() {
                         <Route path="users" element={<AdminUsers />} />
                         <Route path="skill-paths" element={<AdminSkillPaths />} />
                         <Route path="skill-paths/:id" element={<AdminSkillPathEditor />} />
+                        <Route path="skill-paths/:id/curriculum" element={<AdminSkillPathEditor />} />
+                        <Route path="test-curriculum/:id" element={<AdminSkillPathEditor />} />
                         <Route path="practice-tests" element={<AdminPracticeTests />} />
                         <Route path="practice-tests/:id" element={<AdminPracticeTestEditor />} />
                         <Route path="announcements" element={<AdminAnnouncements />} />

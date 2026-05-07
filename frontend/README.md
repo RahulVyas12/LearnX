@@ -1,0 +1,25 @@
+# LearnX - AI-Powered Learning Platform
+
+LearnX is a modern, AI-powered learning platform designed to provide a seamless educational experience. This repository contains both the frontend (React + Vite) and the backend (Node.js).
+
+## Project Structure
+
+- `frontend/`: React application powered by Vite, Tailwind CSS, and Framer Motion.
+- `backend/`: Node.js server with PostgreSQL integration.
+
+## Getting Started
+
+### Frontend
+1. Navigate to `frontend/`
+2. Install dependencies: `npm install`
+3. Run development server: `npm run dev`
+
+### Backend
+1. Navigate to `backend/`
+2. Install dependencies: `npm install`
+3. Start the server: `npm start`
+
+## Technologies Used
+
+- **Frontend**: React 19, Vite, Tailwind CSS, React Router, Framer Motion.
+- **Backend**: Node.js, Express, PostgreSQL.

@@ -1,0 +1,13 @@
+﻿  Determining projects to restore...
+  All projects are up-to-date for restore.
+A:\Projects\Asp.net core\LearnX\backend\Repositories\UserEnrollmentRepository.cs(58,133): error CS1003: Syntax error, ',' expected [A:\Projects\Asp.net core\LearnX\backend\myapp-backend.csproj]
+A:\Projects\Asp.net core\LearnX\backend\Repositories\UserEnrollmentRepository.cs(58,139): error CS1003: Syntax error, ',' expected [A:\Projects\Asp.net core\LearnX\backend\myapp-backend.csproj]
+
+Build FAILED.
+
+A:\Projects\Asp.net core\LearnX\backend\Repositories\UserEnrollmentRepository.cs(58,133): error CS1003: Syntax error, ',' expected [A:\Projects\Asp.net core\LearnX\backend\myapp-backend.csproj]
+A:\Projects\Asp.net core\LearnX\backend\Repositories\UserEnrollmentRepository.cs(58,139): error CS1003: Syntax error, ',' expected [A:\Projects\Asp.net core\LearnX\backend\myapp-backend.csproj]
+    0 Warning(s)
+    2 Error(s)
+
+Time Elapsed 00:00:01.77

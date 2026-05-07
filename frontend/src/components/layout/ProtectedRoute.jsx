@@ -5,6 +5,8 @@ import { useAuth } from '../../hooks/useAuth';
 const ProtectedRoute = ({ requiredRole }) => {
     const { user, loading } = useAuth();
 
+    console.log('ProtectedRoute - User:', user, 'Required Role:', requiredRole, 'Loading:', loading);
+
     // Still verifying session — don't redirect yet
     if (loading) {
         return (
@@ -22,6 +24,7 @@ const ProtectedRoute = ({ requiredRole }) => {
 
     // Not logged in → redirect to appropriate login page
     if (!user) {
+        console.log('ProtectedRoute - No user, redirecting to login');
         if (requiredRole === 'admin') {
             return <Navigate to="/admin/login" replace />;
         }
@@ -30,12 +33,14 @@ const ProtectedRoute = ({ requiredRole }) => {
 
     // Logged in but wrong role → redirect to their own dashboard
     if (requiredRole && user.role !== requiredRole) {
+        console.log('ProtectedRoute - Role mismatch. User role:', user.role, 'Required:', requiredRole);
         if (user.role === 'admin') {
             return <Navigate to="/admin/dashboard" replace />;
         }
         return <Navigate to="/dashboard" replace />;
     }
 
+    console.log('ProtectedRoute - All good, rendering Outlet');
     return <Outlet />;
 };
 
