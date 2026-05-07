@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using myapp_backend.Models;
 using myapp_backend.Repositories.Interfaces;
@@ -39,6 +40,12 @@ namespace myapp_backend.Services
         public async Task DeleteAsync(Guid id)
         {
             await _repository.DeleteAsync(id);
+        }
+
+        public async Task<int> CountAsync()
+        {
+            var allTestAttempts = await _repository.GetAllAsync();
+            return allTestAttempts.Count();
         }
     }
 }
