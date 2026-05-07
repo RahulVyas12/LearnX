@@ -14,5 +14,6 @@ namespace myapp_backend.Repositories.Interfaces
         Task DeleteAsync(Guid id);
         Task<IEnumerable<Level>> GetBySkillPathIdAsync(Guid skillPathId);
         Task<Level?> GetByIdWithModulesAsync(Guid id);
+        Task<IEnumerable<Level>> GetBySkillPathIdWithModulesAsync(Guid skillPathId);
     }
 }
