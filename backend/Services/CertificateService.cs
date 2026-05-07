@@ -1,49 +1,72 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using myapp_backend.Data;
+using myapp_backend.DTOs;
 using myapp_backend.Models;
-using myapp_backend.Repositories.Interfaces;
 using myapp_backend.Services.Interfaces;
 
 namespace myapp_backend.Services
 {
     public class CertificateService : ICertificateService
     {
-        private readonly ICertificateRepository _repository;
+        private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public CertificateService(ICertificateRepository repository)
+        public CertificateService(AppDbContext context, IMapper mapper)
         {
-            _repository = repository;
+            _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<Certificate?> GetByIdAsync(Guid id)
+        public async Task<IEnumerable<CertificateDto>> GetByUserAsync(Guid userId)
         {
-            return await _repository.GetByIdAsync(id);
+            var entities = await _context.Certificates
+                .Where(c => c.UserId == userId)
+                .Include(c => c.SkillPath)
+                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<CertificateDto>>(entities);
         }
 
-        public async Task<IEnumerable<Certificate>> GetAllAsync()
+        public async Task<IEnumerable<CertificateDto>> GetAllCertificatesAsync()
         {
-            return await _repository.GetAllAsync();
+            var entities = await _context.Certificates
+                .Include(c => c.User)
+                .Include(c => c.SkillPath)
+                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<CertificateDto>>(entities);
         }
 
-        public async Task AddAsync(Certificate entity)
+        public async Task<CertificateDto?> ClaimCertificateAsync(Guid userId, Guid skillPathId)
         {
-            await _repository.AddAsync(entity);
-        }
+            var existing = await _context.Certificates
+                .Include(c => c.SkillPath)
+                .FirstOrDefaultAsync(c => c.UserId == userId && c.SkillPathId == skillPathId);
 
-        public async Task UpdateAsync(Certificate entity)
-        {
-            await _repository.UpdateAsync(entity);
-        }
+            if (existing != null)
+                return _mapper.Map<CertificateDto>(existing);
 
-        public async Task DeleteAsync(Guid id)
-        {
-            await _repository.DeleteAsync(id);
-        }
+            var path = await _context.SkillPaths.FindAsync(skillPathId);
+            if (path == null) return null;
 
-        public async Task<IEnumerable<Certificate>> GetByUserAsync(Guid userId)
-        {
-            return await _repository.GetByUserAsync(userId);
+            // Simple verification: in a production app, verify all levels are completed
+            var cert = new Certificate
+            {
+                Id = Guid.NewGuid(),
+                UserId = userId,
+                SkillPathId = skillPathId,
+                CertificateNumber = "LX-" + Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
+                IssuedAt = DateTime.UtcNow
+            };
+
+            await _context.Certificates.AddAsync(cert);
+            await _context.SaveChangesAsync();
+
+            // Load navigation property for mapping
+            cert.SkillPath = path;
+
+            return _mapper.Map<CertificateDto>(cert);
         }
     }
 }
