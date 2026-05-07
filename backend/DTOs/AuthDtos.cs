@@ -37,6 +37,9 @@ namespace myapp_backend.DTOs
         public string Email { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
         public string Token { get; set; } = string.Empty;
+        public string? AvatarUrl { get; set; }
+        public string? Department { get; set; }
+        public DateTime JoinedAt { get; set; }
     }
 
     public class UserProfileDto

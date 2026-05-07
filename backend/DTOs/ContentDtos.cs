@@ -42,6 +42,11 @@ namespace myapp_backend.DTOs
         public int OrderIndex { get; set; }
     }
 
+    public class ModuleDetailDto : ModuleDto
+    {
+        // For future expansion, right now same as ModuleDto but used for detail view
+    }
+
     // ── Admin Create/Update DTOs ──
 
     public class CreateLevelDto
