@@ -1,16 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using myapp_backend.Models;
+using myapp_backend.DTOs;
 
 namespace myapp_backend.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<User?> GetByIdAsync(Guid id);
-        Task<IEnumerable<User>> GetAllAsync();
-        Task AddAsync(User entity);
-        Task UpdateAsync(User entity);
-        Task DeleteAsync(Guid id);
+        Task<AdminUserDto?> GetByIdAsync(Guid id);
+        Task<AdminUserDto?> GetByEmailAsync(string email);
+        Task<IEnumerable<AdminUserDto>> GetAllUsersWithStatsAsync();
+        Task<int> CountAsync();
+        Task<bool> UpdateUserAsync(Guid id, AdminUserUpdateDto dto);
+        Task<bool> DeleteUserAsync(Guid id);
+        Task<AdminUserDto> InviteUserAsync(InviteUserDto dto);
     }
 }

@@ -9,6 +9,7 @@ namespace myapp_backend.Services.Interfaces
     {
         Task<TestAttempt?> GetByIdAsync(Guid id);
         Task<IEnumerable<TestAttempt>> GetAllAsync();
+        Task<int> CountAsync();
         Task AddAsync(TestAttempt entity);
         Task UpdateAsync(TestAttempt entity);
         Task DeleteAsync(Guid id);

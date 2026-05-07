@@ -43,22 +43,20 @@ export default function SkillPathDetail() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const [pathRes, levelsRes, statusRes] = await Promise.all([
+                const [pathRes, levelsWithModulesRes, statusRes] = await Promise.all([
                     skillPathService.getById(id),
-                    skillPathService.getLevels(id),
+                    skillPathService.getLevelsWithModules(id),
                     progressService.getLevelStatus(id)
                 ]);
 
                 const pathData = pathRes.data;
-                const levelsData = levelsRes.data;
+                const levelsData = levelsWithModulesRes.data;
                 const statusData = statusRes.data;
 
                 setPath(pathData);
 
-                // For each level, fetch its modules
-                const levelsWithModules = await Promise.all(levelsData.map(async (level) => {
-                    const modulesRes = await skillPathService.getModulesByLevel(level.id);
-                    const modules = modulesRes.data;
+                const levelsWithModules = levelsData.map((level) => {
+                    const modules = level.modules;
                     const status = statusData.find(s => s.levelId === level.id);
 
                     return {
@@ -81,7 +79,7 @@ export default function SkillPathDetail() {
                             questions: [] // will fetch when starting
                         }
                     };
-                }));
+                });
 
                 setLevels(levelsWithModules);
             } catch (error) {

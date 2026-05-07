@@ -29,17 +29,20 @@ export default function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [stats, setStats] = useState(null);
   const [enrolledPaths, setEnrolledPaths] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const [statsRes, pathsRes] = await Promise.all([
+        const [statsRes, pathsRes, announcementsRes] = await Promise.all([
           progressService.getDashboard(),
-          progressService.getEnrolledPaths()
+          progressService.getEnrolledPaths(),
+          progressService.getAnnouncements()
         ]);
         setStats(statsRes.data);
         setEnrolledPaths(pathsRes.data);
+        setAnnouncements(announcementsRes.data.slice(0, 3)); // Only show latest 3
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
       } finally {
@@ -128,7 +131,13 @@ export default function Dashboard() {
 
                 <div className="flex flex-col gap-5">
                   <UpcomingTestsCard tests={UPCOMING_TESTS} />
-                  <AnnouncementsCard announcements={ANNOUNCEMENTS} />
+                  <AnnouncementsCard announcements={announcements.map(a => ({
+                      id: a.id,
+                      title: a.title,
+                      body: a.content,
+                      date: new Date(a.createdAt).toLocaleDateString(),
+                      dot_color: '#10b981'
+                  }))} />
                 </div>
               </div>
             </>
