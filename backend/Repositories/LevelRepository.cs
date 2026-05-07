@@ -60,9 +60,18 @@ namespace myapp_backend.Repositories
 
         public async Task<Level?> GetByIdWithModulesAsync(Guid id)
         {
-            return await _context.Set<Level>()
-                .Include(l => l.Modules.OrderBy(m => m.OrderIndex))
+            return await _context.Levels
+                .Include(l => l.Modules)
                 .FirstOrDefaultAsync(l => l.Id == id);
+        }
+
+        public async Task<IEnumerable<Level>> GetBySkillPathIdWithModulesAsync(Guid skillPathId)
+        {
+            return await _context.Levels
+                .Where(l => l.SkillPathId == skillPathId)
+                .Include(l => l.Modules)
+                .OrderBy(l => l.OrderIndex)
+                .ToListAsync();
         }
     }
 }
