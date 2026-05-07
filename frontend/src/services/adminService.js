@@ -2,11 +2,14 @@ import api from '../api/axiosInstance';
 
 const adminService = {
     // Dashboard Stats
-    getAdminStats: () => api.get('/progress/admin/stats'),
+    getAdminStats: () => api.get('/admin/stats'),
 
     // User Management
     getAllUsers: () => api.get('/users'),
     updateUserRole: (userId, role) => api.put(`/users/${userId}/role`, { role }),
+    updateUser: (userId, data) => api.put(`/users/${userId}`, data),
+    deleteUser: (userId) => api.delete(`/users/${userId}`),
+    inviteUser: (data) => api.post('/admin/invite', data),
 
     // Skill Path Management
     getAllSkillPaths: () => api.get('/skillpaths/admin/all'),
