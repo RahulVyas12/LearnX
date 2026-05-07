@@ -6,7 +6,7 @@
 //  Right bottom: Skill Path Progress bars
 // =============================================================
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import SideBar from '../components/layout/SideBar';
 import TopBar from '../components/layout/TopBar';
 import { useAuth } from '../hooks/useAuth';
