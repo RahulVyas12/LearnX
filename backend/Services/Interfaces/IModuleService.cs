@@ -1,17 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using myapp_backend.Models;
+using myapp_backend.DTOs;
 
 namespace myapp_backend.Services.Interfaces
 {
     public interface IModuleService
     {
-        Task<Module?> GetByIdAsync(Guid id);
-        Task<IEnumerable<Module>> GetAllAsync();
-        Task AddAsync(Module entity);
-        Task UpdateAsync(Module entity);
-        Task DeleteAsync(Guid id);
-        Task<IEnumerable<Module>> GetByLevelIdAsync(Guid levelId);
+        Task<ModuleDto?> GetByIdAsync(Guid id);
+        Task<ModuleDetailDto?> GetDetailByIdAsync(Guid id);
+        Task<IEnumerable<ModuleDto>> GetAllAsync();
+        Task<ModuleDto> AddAsync(ModuleDto dto);
+        Task<bool> UpdateAsync(Guid id, ModuleDto dto);
+        Task<bool> DeleteAsync(Guid id);
+        Task<IEnumerable<ModuleDto>> GetByLevelIdAsync(Guid levelId);
     }
 }

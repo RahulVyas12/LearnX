@@ -1,14 +1,13 @@
-using myapp_backend.Models;
+using myapp_backend.DTOs;
 
 namespace myapp_backend.Services.Interfaces
 {
     public interface ILevelMasteryTestService
     {
-        Task<LevelMasteryTest?> GetByIdAsync(Guid id);
-        Task<LevelMasteryTest?> GetByLevelIdAsync(Guid levelId);
-        Task<IEnumerable<LevelMasteryTest>> GetAllAsync();
-        Task<LevelMasteryTest> AddAsync(LevelMasteryTest masteryTest);
-        Task<LevelMasteryTest> UpdateAsync(LevelMasteryTest masteryTest);
-        Task DeleteAsync(Guid id);
+        Task<LevelMasteryTestDto?> GetByIdAsync(Guid id);
+        Task<LevelMasteryTestDto?> GetByLevelIdAsync(Guid levelId);
+        Task<LevelMasteryTestDto> AddAsync(CreateLevelMasteryTestDto dto);
+        Task<bool> UpdateAsync(Guid id, UpdateLevelMasteryTestDto dto);
+        Task<bool> DeleteAsync(Guid id);
     }
 }
