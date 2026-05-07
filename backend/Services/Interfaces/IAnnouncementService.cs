@@ -1,16 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using myapp_backend.Models;
+using myapp_backend.DTOs;
 
 namespace myapp_backend.Services.Interfaces
 {
     public interface IAnnouncementService
     {
-        Task<Announcement?> GetByIdAsync(Guid id);
-        Task<IEnumerable<Announcement>> GetAllAsync();
-        Task AddAsync(Announcement entity);
-        Task UpdateAsync(Announcement entity);
-        Task DeleteAsync(Guid id);
+        Task<AnnouncementDto?> GetByIdAsync(Guid id);
+        Task<IEnumerable<AnnouncementDto>> GetAllAsync();
+        Task<AnnouncementDto> AddAsync(AnnouncementCreateDto dto, Guid userId);
+        Task<bool> DeleteAsync(Guid id);
     }
 }
